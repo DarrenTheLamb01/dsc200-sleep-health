@@ -14,9 +14,9 @@ We train a classification model to predict a person's risk of sleep disorder fro
 
 | Role | Owner | Owns |
 |---|---|---|
-| Data lead | _TBD_ | `src/data/` |
-| Modeling lead | _TBD_ | `src/models/` |
-| App / visualization lead | _TBD_ | `src/app/` |
+| Data lead | Ethan Arnn | `src/data/` |
+| Modeling lead | Ethan Hershman | `src/models/` |
+| App / visualization lead | Tammy Nguyen | `src/app/` |
 | Integration / spec lead | Darren Lam | repo, tests runner, spec |
 
 Teammates: Ethan Arnn, Tammy Nguyen, Ethan Hershman.
