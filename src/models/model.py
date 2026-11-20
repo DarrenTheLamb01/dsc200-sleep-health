@@ -5,7 +5,13 @@ from typing import Any, Dict, List
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
-from sklearn.metrics import f1_score
+from sklearn.metrics import (
+    accuracy_score,
+    balanced_accuracy_score,
+    f1_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.pipeline import Pipeline
 
 from src.models.features import (
@@ -93,9 +99,32 @@ def train(train_df: pd.DataFrame, val_df: pd.DataFrame) -> SleepRiskModel:
     )
 
 
-def evaluate(model: Any, df: pd.DataFrame) -> Dict[str, float]:
-    """Return a dict of metrics (e.g. accuracy, macro-F1) for `model` on `df`."""
-    raise NotImplementedError
+def evaluate(model: SleepRiskModel, df: pd.DataFrame) -> Dict[str, float]:
+    """Return a dict of metrics for `model` on `df`.
+
+    Macro-F1 is the headline metric because the classes are imbalanced and
+    the rare classes (Moderate, Severe) matter most.
+    """
+    y_true = df[TARGET]
+    y_pred = model.predict(df)
+    proba = model.predict_proba(df)
+
+    metrics = {
+        "accuracy": accuracy_score(y_true, y_pred),
+        "macro_f1": f1_score(y_true, y_pred, average="macro"),
+        "weighted_f1": f1_score(y_true, y_pred, average="weighted"),
+        "balanced_accuracy": balanced_accuracy_score(y_true, y_pred),
+        "roc_auc_ovr": roc_auc_score(
+            y_true, proba, multi_class="ovr", average="macro", labels=model.classes
+        ),
+    }
+    recalls = recall_score(
+        y_true, y_pred, labels=model.classes, average=None, zero_division=0
+    )
+    for cls, r in zip(model.classes, recalls):
+        metrics[f"recall_{cls.lower()}"] = r
+
+    return {k: float(v) for k, v in metrics.items()}
 
 
 def predict_with_explanation(model: Any, input_dict: Dict[str, Any]) -> Dict[str, Any]:
