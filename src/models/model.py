@@ -1,7 +1,9 @@
 """Model training, evaluation, and explanations. Owner: Modeling lead."""
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from pathlib import Path
+from typing import Any, Dict, List, Union
 
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
@@ -24,6 +26,8 @@ from src.models.features import (
 )
 
 SEED = 42
+
+DEFAULT_MODEL_PATH = Path("models") / "sleep_risk_model.joblib"
 
 # Small grid searched on the validation set. Kept small so training stays fast.
 PARAM_GRID: List[Dict[str, Any]] = [
@@ -126,6 +130,26 @@ def evaluate(model: SleepRiskModel, df: pd.DataFrame) -> Dict[str, float]:
         metrics[f"recall_{cls.lower()}"] = r
 
     return {k: float(v) for k, v in metrics.items()}
+
+
+def save_model(
+    model: SleepRiskModel, path: Union[str, Path] = DEFAULT_MODEL_PATH
+) -> Path:
+    """Save a trained model to disk and return the path."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, path)
+    return path
+
+
+def load_model(path: Union[str, Path] = DEFAULT_MODEL_PATH) -> SleepRiskModel:
+    """Load a model saved with save_model."""
+    path = Path(path)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"No model at {path}. Train one with: python -m src.models.train"
+        )
+    return joblib.load(path)
 
 
 TOP_K = 5
