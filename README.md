@@ -73,6 +73,42 @@ Code against these signatures so the pieces fit together. If one needs to change
 | `src/models` | `evaluate(model, df)` | dict of metrics |
 | `src/models` | `predict_with_explanation(model, input_dict)` | `{risk_score, top_factors}` |
 
+## Model
+
+**Classifier:** `HistGradientBoostingClassifier` with balanced class weights, predicting `sleep_disorder_risk` (Healthy / Mild / Moderate / Severe). Three hyperparameter settings are tried and the best by validation macro-F1 is kept. It beat logistic regression (macro-F1 0.72) and random forest (0.85) on the same features.
+
+**Features** (defined in `src/models/features.py`): only things a person can report about themselves, such as age, BMI, sleep duration, sleep latency, wake-ups, caffeine, alcohol, screen time, exercise, steps, naps, stress, work hours, resting heart rate, sleep aids, shift work, room temperature, weekend sleep difference, gender, occupation, chronotype, mental health condition and day type.
+
+**Excluded columns:**
+
+| Column | Reason |
+|---|---|
+| `sleep_quality_score`, `cognitive_performance_score`, `felt_rested` | Outcomes of sleep, not lifestyle inputs; they leak the target |
+| `rem_percentage`, `deep_sleep_percentage` | Need a sleep tracker; users can't self-report them |
+| `country`, `season` | No relationship with the target in this data |
+| `person_id` | Identifier |
+
+**Risk score:** expected severity across the four classes, scaled to [0, 1] (Healthy = 0, Mild = 1/3, Moderate = 2/3, Severe = 1).
+
+**Top factors:** for each feature, the change in risk score when that feature is reset to a typical training value (median, or most common category). The five largest by size are returned; positive means the feature raises this person's risk. Fields left out of `input_dict` are filled with typical values, so a partial form still works.
+
+**Train and save:**
+
+```bash
+python -m src.models.train    # writes models/sleep_risk_model.joblib
+```
+
+The model file is gitignored, so each person runs this once locally. The app loads it with `load_model()`. The script uses `src/data/pipeline.py` when it exists, and otherwise does its own 70/15/15 stratified split.
+
+**Test set results** (15,000 held-out rows):
+
+| Metric | Value |
+|---|---|
+| Macro-F1 | 0.867 |
+| Accuracy | 0.943 |
+| ROC AUC (one-vs-rest) | 0.991 |
+| Recall: Healthy / Mild / Moderate / Severe | 0.996 / 0.907 / 0.791 / 0.831 |
+
 ## Workflow
 
 - Never push directly to `main`.
