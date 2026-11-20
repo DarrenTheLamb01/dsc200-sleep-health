@@ -16,6 +16,7 @@ from sklearn.pipeline import Pipeline
 
 from src.models.features import (
     CATEGORICAL_FEATURES,
+    CLASS_ORDER,
     FEATURES,
     NUMERIC_FEATURES,
     TARGET,
@@ -127,10 +128,45 @@ def evaluate(model: SleepRiskModel, df: pd.DataFrame) -> Dict[str, float]:
     return {k: float(v) for k, v in metrics.items()}
 
 
-def predict_with_explanation(model: Any, input_dict: Dict[str, Any]) -> Dict[str, Any]:
+TOP_K = 5
+
+
+def _risk_scores(model: SleepRiskModel, df: pd.DataFrame) -> np.ndarray:
+    """Expected severity in [0, 1]: Healthy=0, Mild=1/3, Moderate=2/3, Severe=1."""
+    proba = model.predict_proba(df)
+    severity = np.array([CLASS_ORDER.index(c) for c in model.classes])
+    return proba @ severity / (len(CLASS_ORDER) - 1)
+
+
+def predict_with_explanation(
+    model: SleepRiskModel, input_dict: Dict[str, Any]
+) -> Dict[str, Any]:
     """Predict risk for one person.
 
     Returns {"risk_score": float in [0, 1], "top_factors": list of
-    (feature_name, contribution) tuples}.
+    (feature_name, contribution) tuples, "predicted_class": str,
+    "class_probabilities": {class: prob}}.
+
+    A factor's contribution is how much the risk score drops (or rises) if
+    that one feature is reset to a typical value from the training data.
+    Positive means the feature is pushing this person's risk up. Fields
+    missing from `input_dict` are filled with the typical value.
     """
-    raise NotImplementedError
+    person = {f: input_dict.get(f, model.baseline[f]) for f in FEATURES}
+
+    # Row 0 is the person as entered; row i+1 has feature i reset to baseline.
+    rows = [person] + [{**person, f: model.baseline[f]} for f in FEATURES]
+    batch = pd.DataFrame(rows, columns=FEATURES)
+    scores = _risk_scores(model, batch)
+
+    risk = float(scores[0])
+    contributions = {f: risk - float(s) for f, s in zip(FEATURES, scores[1:])}
+    top = sorted(contributions.items(), key=lambda kv: abs(kv[1]), reverse=True)
+
+    proba = model.predict_proba(batch.iloc[[0]])[0]
+    return {
+        "risk_score": risk,
+        "top_factors": [(f, round(c, 4) + 0.0) for f, c in top[:TOP_K]],  # +0.0 avoids -0.0
+        "predicted_class": model.classes[int(np.argmax(proba))],
+        "class_probabilities": {c: float(p) for c, p in zip(model.classes, proba)},
+    }
