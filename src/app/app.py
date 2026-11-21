@@ -1,4 +1,3 @@
-
 """Sleep, Lifestyle, and Daily Performance dashboard."""
 
 from pathlib import Path
@@ -258,10 +257,6 @@ def create_app() -> Dash:
                             html.Span("SleepWell", className="logo-text"),
                         ],
                         className="brand",
-                    ),
-                    html.Span(
-                        "UC San Diego · DSC 200",
-                        className="nav-subtitle",
                     ),
                 ],
                 className="navbar",

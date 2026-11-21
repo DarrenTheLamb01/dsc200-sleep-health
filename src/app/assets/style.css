@@ -1,0 +1,345 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #7968d9;
+    --primary-dark: #6250c3;
+    --background: #f8f7fd;
+    --text: #302c43;
+    --muted: #89869b;
+    --border: #ebe9f3;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "DM Sans", sans-serif;
+}
+
+.navbar {
+    height: 76px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 max(24px, calc((100vw - 1180px) / 2));
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #eeeaff;
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.logo-text {
+    font-family: "Outfit", sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.nav-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.container {
+    max-width: 1180px;
+    margin: auto;
+    padding: 55px 24px 30px;
+}
+
+.hero {
+    max-width: 740px;
+    margin-bottom: 40px;
+}
+
+.eyebrow {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.hero h1 {
+    font-family: "Outfit", sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+    margin: 15px 0;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 8px 35px rgba(55, 40, 100, 0.035);
+    min-width: 0;
+}
+
+.card-header {
+    margin-bottom: 28px;
+}
+
+.card-header h2 {
+    font-family: "Outfit", sans-serif;
+    font-size: 25px;
+    margin: 12px 0 8px;
+}
+
+.card-header p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.form-section {
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+}
+
+.section-title {
+    font-family: "Outfit", sans-serif;
+    font-size: 17px;
+    margin: 0 0 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-field {
+    min-width: 0;
+}
+
+.field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.form-input {
+    display: block;
+    width: 100%;
+    height: 44px;
+    border: 1px solid #e5e2ef;
+    border-radius: 10px;
+    padding: 0 12px;
+    background: #fcfbff;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+}
+
+.form-dropdown .Select-control {
+    border: 1px solid #e5e2ef;
+    border-radius: 10px;
+    background: #fcfbff;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.form-dropdown .Select-value-label {
+    color: var(--text) !important;
+    font-size: 13px;
+}
+
+.form-dropdown .Select-placeholder {
+    font-size: 13px;
+    color: #aaa6ba;
+}
+
+.form-input:focus,
+.form-dropdown.is-focused .Select-control {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #eeeaff;
+}
+
+.primary-button {
+    width: 100%;
+    margin-top: 24px;
+    padding: 17px;
+    border: none;
+    border-radius: 12px;
+    background: var(--primary);
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.primary-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.results-content {
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 24px;
+    background: #f1edff;
+    color: var(--primary);
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.results-content h3 {
+    font-family: "Outfit", sans-serif;
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.results-content p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 270px;
+}
+
+.prediction-output {
+    width: 100%;
+}
+
+.risk-summary {
+    background: #f5f2ff;
+    border-radius: 18px;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.risk-number {
+    font-family: "Outfit", sans-serif;
+    font-size: 76px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+    margin-top: 10px;
+}
+
+.risk-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin: 4px 0 20px;
+}
+
+.risk-category {
+    display: inline-block;
+    background: white;
+    color: var(--primary-dark);
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.chart-title {
+    font-family: "Outfit", sans-serif;
+    font-size: 19px;
+    margin: 32px 0 12px;
+}
+
+.info-note {
+    color: var(--muted);
+    background: #f8f7fc;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 20px;
+}
+
+.error-message {
+    padding: 22px;
+    background: #fff5f5;
+    border-radius: 12px;
+    color: #9d4444;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 35px 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+@media (max-width: 850px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 32px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    .nav-subtitle {
+        display: none;
+    }
+
+    .footer {
+        flex-direction: column;
+    }
+}
