@@ -111,7 +111,6 @@ The model file is gitignored, so each person runs this once locally. The app loa
 
 ## Workflow
 
-- Never push directly to `main`.
 - Make a branch named `<area>/<task>` (for example `data/cleaning`, `app/input-form`).
 - Open a pull request into `main`. The integration lead reviews and merges.
 - Commit small and often.
