@@ -110,8 +110,5 @@ The model file is gitignored, so each person runs this once locally. The app loa
 | Recall: Healthy / Mild / Moderate / Severe | 0.996 / 0.907 / 0.791 / 0.831 |
 
 ## Workflow
-
-- Make a branch named `<area>/<task>` (for example `data/cleaning`, `app/input-form`).
-- Open a pull request into `main`. The integration lead reviews and merges.
 - Commit small and often.
 - Requirement IDs (FR-1, NFR-1) and test IDs (UT-1, FT-1) are defined in `docs/`.
